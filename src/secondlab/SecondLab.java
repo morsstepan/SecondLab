@@ -8,7 +8,10 @@ package secondlab;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.Scanner;
+import java.util.function.Consumer;
 
 /**
  *
@@ -32,13 +35,19 @@ public class SecondLab {
             //writeUsingFileWriter("Entered matrix: \n");
             //myMatrix.printMatrix();
             out.flush();
+            String aKindOfBeauty="--------------------------------------------------------------\n";
+            writeUsingFileWriter("Entered matrix from 'data.txt': \n");
+            //myMatrix.writeUsingFileWriter();
+            double doubleMatrix[][] = myMatrix.convertToDouble();
+            writeUsingFileWriter(doubleMatrix);
+            writeUsingFileWriter(aKindOfBeauty);
             double k=myMatrix.determinant();
             String detString="A determinant of a matrix: ";
             writeUsingFileWriter(detString+k+"\n");
-            String aKindOfBeauty="-------------------------------------------------------------\n";
             writeUsingFileWriter(aKindOfBeauty);
             //System.out.println("det: "+k);
-            double doubleMatrix[][] = myMatrix.convertToDouble();
+            //System.out.println(Arrays.deepToString(doubleMatrix));
+            //writeUsingFileWriter(doubleMatrix);
             //myMatrix.printDoubleMatrix(doubleMatrix);
             if(k!=0){
                 double invertedMatrix[][]=myMatrix.invert(doubleMatrix);
@@ -48,7 +57,7 @@ public class SecondLab {
                 //myMatrix.printDoubleMatrix(invertedMatrix);
             }
             else{
-                writeUsingFileWriter("Determinant equals 0. An invertible matrix doesn't exist \n");
+                writeUsingFileWriter("A determinant equals 0. An invertible matrix doesn't exist. \n");
                 writeUsingFileWriter(aKindOfBeauty);
             }
             String sqString="Matrix of degree 2: \n";
@@ -78,7 +87,6 @@ public class SecondLab {
             //writeUsingFileWriter(cubString);
             //writeUsingFileWriter(cubedMatrix);
             //writeUsingFileWriter(aKindOfBeauty);
-            
             //out.close();
         }
         catch(IOException e){
@@ -93,7 +101,7 @@ public class SecondLab {
             out = new FileWriter(outFile, true);
             out.write(data);
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace();    
         }finally{
             try {
                 out.close();
@@ -107,15 +115,23 @@ public class SecondLab {
         FileWriter out = null;
         try {
             out = new FileWriter(outFile, true);
-            for(int i = 0; i < data.length; i++){ 
+            /*for(int i = 0; i < data.length; i++){ 
                 for(int j = 0; j < data.length; j++){ 
                     //System.out.print(doubleMatrix[i][j]);
-                    out.append(" "+data[i][j]+" ");
-                    if(j < data.length-1 ) 
-                        out.append("    "); 
+                    out.append((Math.round(data[i][j] * 100.0) / 100.0)+"");
+                    //if(j < data.length-1 ) 
+                        out.append("\t"); 
                 } 
+                
                 out.append("\n"); 
-            } 
+            } */
+            for(int i = 0; i < data.length; i++)
+                for(int j = 0; j < data.length; j++)
+                    data[i][j]=(Math.round(data[i][j] * 100.0) / 100.0);
+            for (double[] row : data){
+                out.append(Arrays.toString(row));
+                out.append("\n");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }finally{
@@ -141,5 +157,9 @@ public class SecondLab {
                 e.printStackTrace();
             }
         }
+    }
+    public static void printArray(double matrix[][]) {
+    for (double[] row : matrix) 
+        System.out.println(Arrays.toString(row));       
     }
 }

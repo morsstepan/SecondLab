@@ -6,6 +6,7 @@
 package secondlab;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -16,7 +17,7 @@ import java.util.Scanner;
  */
 public class Matrix {
     ArrayList <ArrayList<Double>> matrix;
-    private  int size;
+    private int size;
     public Matrix(int n){
         matrix = new ArrayList<>();
         size=n;
@@ -50,6 +51,30 @@ public class Matrix {
             System.out.println(); 
         } 
     } 
+    public void writeUsingFileWriter() {
+        File outFile = new File("result.txt");
+        FileWriter out = null;
+        try {
+            out = new FileWriter(outFile, true);
+            for(int i = 0; i < size; i++){ 
+                for(int j = 0; j < size; j++){ 
+                    //System.out.print(doubleMatrix[i][j]);
+                    out.append(this.matrix.get(i).get(j)+"");
+                    if(j < size-1 ) 
+                        out.append("\t"); 
+                } 
+                out.append("\n"); 
+            } 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     public double determinant()
     {
         double det=0;
