@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -28,7 +29,14 @@ public class Matrix {
     public static Matrix CreateFromFile(File file){
         try{ 
             Scanner sc = new Scanner(file); 
-            int n=sc.nextInt(); 
+            int n=0;
+            //if(sc.hasNextInt())
+                n=sc.nextInt(); 
+            //else{
+                //throw new InputMismatchException("Wrong dismention of a matrix!");
+                //SecondLab.writeUsingFileWriter("Wrong dismention of a matrix!");
+                //writeUsingFileWriter("dd");
+            //}
             Matrix myMatrix = new Matrix(n); 
             for(int i = 0; i < n; i++){ 
                     for(int j = 0; j < n; j++) 
@@ -36,10 +44,23 @@ public class Matrix {
             }
             return myMatrix;
         } 
-        catch(IOException e){ 
-            System.out.println("Error!"); 
+        catch(ArrayIndexOutOfBoundsException e){
+            System.out.println("A matrix with dismention '0' doesn't exist.");
             return null;
         }
+        catch(IOException e){ 
+            System.out.println("a common error!"); 
+            return null;
+        }
+        catch(InputMismatchException e){
+            System.out.println("Wrong symbols in a matrix!"); 
+            return null;
+        }
+        catch(NegativeArraySizeException e){
+            System.out.println("A negative array size.");
+            return null;
+        }
+        
     }
     public void printMatrix(){ 
         for(int i = 0; i < size; i++){ 
@@ -118,11 +139,21 @@ public class Matrix {
         return det;
     }
     public double[][] convertToDouble(){
-        double doubleMatrix[][] = new double[size][size];
-        for(int i=0; i<doubleMatrix.length;i++)
-            for(int j=0; j<doubleMatrix.length; j++)
-                doubleMatrix[i][j]=matrix.get(i).get(j);   
-        return doubleMatrix;
+        try{
+            double doubleMatrix[][] = new double[size][size];
+            for(int i=0; i<doubleMatrix.length;i++)
+                for(int j=0; j<doubleMatrix.length; j++)
+                    doubleMatrix[i][j]=matrix.get(i).get(j);   
+            return doubleMatrix;
+        }
+        catch(InputMismatchException e){
+            System.out.println("Wrong symbols in a matrix!"); 
+            return null;
+        }
+        catch(NegativeArraySizeException e){
+            System.out.println("A negative array size.");
+            return null;
+        }
     }
     public static void printDoubleMatrix(double [][] doubleMatrix){ 
         for(int i = 0; i < doubleMatrix.length; i++){ 
@@ -225,17 +256,28 @@ public class Matrix {
         }
     }
     public static double[][] multiply(double[][] a, double[][] b) {
-        int m1 = a.length;
-        int n1 = a[0].length;
-        int m2 = b.length;
-        int n2 = b[0].length;
-        if (n1 != m2) throw new RuntimeException("Illegal matrix dimensions.");
-        double[][] c = new double[m1][n2];
-        for (int i = 0; i < m1; i++)
-            for (int j = 0; j < n2; j++)
-                for (int k = 0; k < n1; k++)
-                    c[i][j] += a[i][k] * b[k][j];
+        try{
+            int m1 = a.length;
+        
+            int n1 = a[0].length;
+            int m2 = b.length;
+            int n2 = b[0].length;
+            if (n1 != m2) throw new RuntimeException("Illegal matrix dimensions.");
+            double[][] c = new double[m1][n2];
+            for (int i = 0; i < m1; i++)
+                for (int j = 0; j < n2; j++)
+                    for (int k = 0; k < n1; k++)
+                        c[i][j] += a[i][k] * b[k][j];
+            return c;
         //SecondLab.writeUsingFileWriter(c);
-        return c;
+        }
+        catch(ArrayIndexOutOfBoundsException e){
+            System.out.println("A matrix with dismention '0' doesn't exist.");
+            return null;
+        }
+        catch(NegativeArraySizeException e){
+            System.out.println("A negative array size.");
+            return null;
+        }
     }
 }

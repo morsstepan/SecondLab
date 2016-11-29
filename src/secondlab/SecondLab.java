@@ -92,7 +92,9 @@ public class SecondLab {
         catch(IOException e){
             System.out.println("Error!");  
         }
-        
+        catch(NullPointerException e){
+            System.out.println(""); 
+        }
     }
     public static void writeUsingFileWriter(String data) {
         File outFile = new File("result.txt");
